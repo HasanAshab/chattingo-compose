@@ -1,0 +1,6 @@
+# Ignore generated environment files
+.env.*
+
+# But keep example/sample files
+!.env.*.example
+!.env.*.sample

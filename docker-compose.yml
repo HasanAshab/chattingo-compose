@@ -1,0 +1,50 @@
+services:
+  frontend:
+    image: hasan18205/chattingo-frontend:latest
+    env_file: ./envs/.env.frontend
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - backend-frontend-net
+    depends_on:
+      - backend
+
+  backend:
+    image: hasan18205/chattingo-backend:latest
+    env_file: ./envs/.env.backend
+    ports:
+      - "8080:8080"
+    volumes:
+      - ~/.m2:/root/.m2
+    networks:
+      - backend-db-net
+      - backend-frontend-net
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8
+    env_file: ./envs/.env.db
+    networks:
+      - backend-db-net
+    volumes:
+      - db-data:/var/lib/mysql
+    expose:
+      - "3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+networks:
+  backend-frontend-net:
+  backend-db-net:
+
+volumes:
+  db-data:
