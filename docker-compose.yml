@@ -1,6 +1,6 @@
 services:
   frontend:
-    image: hasan18205/chattingo-frontend:3823a05
+    image: hasan18205/chattingo-frontend:c1e0534
     env_file: ./envs/.env.frontend
     ports:
       - "3000:3000"
@@ -14,7 +14,7 @@ services:
         condition: service_healthy
 
   backend:
-    image: hasan18205/chattingo-backend:latest
+    image: hasan18205/chattingo-backend:449dff8
     env_file: ./envs/.env.backend
     ports:
       - "8080:8080"
