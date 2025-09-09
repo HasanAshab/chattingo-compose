@@ -14,7 +14,7 @@ services:
         condition: service_healthy
 
   backend:
-    image: hasan18205/chattingo-backend:latest
+    image: hasan18205/chattingo-backend:449dff8
     env_file: ./envs/.env.backend
     ports:
       - "8080:8080"
