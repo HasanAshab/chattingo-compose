@@ -32,7 +32,6 @@ for envfile in "$ENV_DIR"/.env.*; do
     sed -i "s/^SPRING_DATASOURCE_PASSWORD=.*/SPRING_DATASOURCE_PASSWORD=$DB_PASSWORD/" "$envfile"
     sed -i "s/^MYSQL_ROOT_PASSWORD=.*/MYSQL_ROOT_PASSWORD=$DB_PASSWORD/" "$envfile"
     sed -i "s/^MYSQL_ROOT_PASSWORD$/MYSQL_ROOT_PASSWORD=$DB_PASSWORD/" "$envfile"
-    sed -i "s|^REACT_APP_API_URL=.*|REACT_APP_API_URL=http://$PUBLIC_IP:8080|" "$envfile"
     sed -i "s|^CORS_ALLOWED_ORIGINS=.*|CORS_ALLOWED_ORIGINS=http://$PUBLIC_IP:3000|" "$envfile"
   fi
 done
