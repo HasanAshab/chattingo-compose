@@ -17,23 +17,24 @@ if [ -z "$PUBLIC_IP" ]; then
     exit 1
 fi
 
-# Copy and rename all .sample/.example files
-for file in "$ENV_DIR"/.env.*.sample "$ENV_DIR"/.env.*.example; do
+# Copy and rename all .example files
+for file in "$ENV_DIR"/.env.*.example; do
   [ -e "$file" ] || continue
   base=$(basename "$file")
-  target_name="${base/.sample/}"
-  target_name="${target_name/.example/}"
+  target_name="${base/.example/}"
   cp "$file" "$ENV_DIR/$target_name"
-
 done
 
-# Replace variables in all env files
+# Replace variables in all env files (excluding .example files)
 for envfile in "$ENV_DIR"/.env.*; do
-  [ -e "$envfile" ] || continue
-  sed -i "s/^SPRING_DATASOURCE_PASSWORD=.*/SPRING_DATASOURCE_PASSWORD=$DB_PASSWORD/" "$envfile"
-  sed -i "s/^MYSQL_ROOT_PASSWORD=.*/MYSQL_ROOT_PASSWORD=$DB_PASSWORD/" "$envfile"
-  sed -i "s/^MYSQL_ROOT_PASSWORD$/MYSQL_ROOT_PASSWORD=$DB_PASSWORD/" "$envfile"
-  sed -i "s|^REACT_APP_API_URL=.*|REACT_APP_API_URL=https://$PUBLIC_IP:8080|" "$envfile"
+  if [[ "$envfile" != *.example ]]; then
+    [ -e "$envfile" ] || continue
+    sed -i "s/^SPRING_DATASOURCE_PASSWORD=.*/SPRING_DATASOURCE_PASSWORD=$DB_PASSWORD/" "$envfile"
+    sed -i "s/^MYSQL_ROOT_PASSWORD=.*/MYSQL_ROOT_PASSWORD=$DB_PASSWORD/" "$envfile"
+    sed -i "s/^MYSQL_ROOT_PASSWORD$/MYSQL_ROOT_PASSWORD=$DB_PASSWORD/" "$envfile"
+    sed -i "s|^REACT_APP_API_URL=.*|REACT_APP_API_URL=http://$PUBLIC_IP:8080|" "$envfile"
+    sed -i "s|^CORS_ALLOWED_ORIGINS=.*|CORS_ALLOWED_ORIGINS=http://$PUBLIC_IP:3000|" "$envfile"
+  fi
 done
 
 echo "Environment files prepared in $ENV_DIR."
