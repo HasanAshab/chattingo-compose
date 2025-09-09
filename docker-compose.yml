@@ -1,6 +1,6 @@
 services:
   frontend:
-    image: hasan18205/chattingo-frontend:test55
+    image: hasan18205/chattingo-frontend:3823a05
     env_file: ./envs/.env.frontend
     ports:
       - "3000:3000"
